@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacts Book</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.js') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+
+<body>
+    <!-- Header Section Start -->
+    <header class="header">
+        <span class="logo">
+            call manager
+        </span>
+
+        <div class="abilities-container">
+
+            <div class="input-group search-container">
+                <input type="text" class="form-control search-field" placeholder="Search for contact">
+                <button class="btn btn-primary search-button">
+                    <span class="material-symbols-outlined text-light">search</span>
+                    search
+                </button>
+            </div>
+
+            <select class="search-option form-select">
+                <option value="name">search by name</option>
+                <option value="phone">search by phone</option>
+            </select>
+
+            <div class="buttons-container">
+                <button class="btn btn-danger clear-button">Reset</button>
+            </div>
+
+        </div>
+    </header>
+    <!-- Header Section End -->
+
+    <!-- Content Section Start-->
+    <section class="content">
+        <header class="pannel">
+            <button class="new_contact btn btn-success d-flex justify-content-center align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#createModal">
+                <span class="material-symbols-outlined">person_add</span>
+                new contact
+            </button>
+            <div class="filters">
+                <button class="filter-ascending btn btn-primary d-flex justify-content-center align-items-center gap-2">
+                    <span class="material-symbols-outlined">arrow_upward</span>
+                    filter ascending
+                </button>
+                <button
+                    class="filter-descending btn btn-primary d-flex justify-content-center align-items-center gap-2">
+                    <span class="material-symbols-outlined">arrow_downward</span>
+                    filter descending
+                </button>
+
+                <select class="filter-option form-select">
+                    <option value="fname">filter by first name</option>
+                    <option value="lname">filter by last name</option>
+                    <option value="phone">filter by phone</option>
+                </select>
+            </div>
+        </header>
+        <section class="storage"></section>
+    </section>
+    <!-- Content Section End -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editModalLabel">Edit Contact</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">First name</label>
+                        <input type="text" name="editfirstname" id="editfirstname" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last name</label>
+                        <input type="text" name="editlastname" id="editlastname" class="form-control">
+                    </div>
+                    <div class="form-grop">
+                        <label class="form-label">Phone</label>
+                        <input type="text" name="editphone" id="editphone" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="edit-category form-select" id="editcategory">
+                            <option value="work">Work</option>
+                            <option value="friends">Friends</option>
+                            <option value="family">Family</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary edit-save">Save contact</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="createModalLabel">Create Contact</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">First name</label>
+                        <input type="text" name="firstname" id="firstname" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last name</label>
+                        <input type="text" name="lastname" id="lastname" class="form-control">
+                    </div>
+                    <div class="form-grop">
+                        <label class="form-label">Phone</label>
+                        <input type="text" name="phone" id="phone" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="create-category form-select" id="category">
+                            <option value="work">Work</option>
+                            <option value="friends">Friends</option>
+                            <option value="family">Family</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success create-contact">Create Contact</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    /*Utility for laoding initial content*/
+    function loadContet(filter) {
+        $(".storage").empty()
+        $.ajax({
+            method: "GET",
+            url: "http://localhost:5000/api/contacts/all",
+            dataType: "json"
+        }).done((data) => {
+            if (filter === undefined) {
+                $.each(data, (index, value) => {
+                    $(".storage").append(`
+                    <div class="contact-row">
+                        <span class="contact-row-id">${index + 1}</span>
+                        <span class="contact-row-firstname">${value.firstName}</span>
+                        <span class="contact-row-lastname">${value.lastName}</span>
+                        <span class="contact-row-phone">${value.phone}</span>
+                        <span class="contact-row-category">${value.category}</span>
+                    </div>
+                `)
+                })
+            }
+            else if (filter === "ascending") {
+                if ($(".filter-option").val() === "fname") {
+                    data.sort((a, b) => {
+                        if (a.firstName < b.firstName) return -1;
+                        else if (a.firstName > b.firstName) return 1;
+                        return 0
+                    });
+
+                    $.each(data, (index, value) => {
+                        $(".storage").append(`
+                    <div class="contact-row">
+                        <span class="contact-row-id">${index + 1}</span>
+                        <span class="contact-row-firstname">${value.firstName}</span>
+                        <span class="contact-row-lastname">${value.lastName}</span>
+                        <span class="contact-row-phone">${value.phone}</span>
+                        <span class="contact-row-category">${value.category}</span>
+                    </div>
+                `)
+                    })
+                }
+                else if ($(".filter-option").val() === "lname") {
+                    data.sort((a, b) => {
+                        if (a.lastName < b.lastName) return -1;
+                        else if (a.lastName > b.lastName) return 1;
+                        return 0
+                    });
+                    $.each(data, (index, value) => {
+                        $(".storage").append(`
+                    <div class="contact-row">
+                        <span class="contact-row-id">${index + 1}</span>
+                        <span class="contact-row-firstname">${value.firstName}</span>
+                        <span class="contact-row-lastname">${value.lastName}</span>
+                        <span class="contact-row-phone">${value.phone}</span>
+                        <span class="contact-row-category">${value.category}</span>
+                    </div>
+                `)
+                    })
+                }
+                else if ($(".filter-option").val() === "phone") {
+                    data.sort((a, b) => {
+                        if (a.phone < b.phone) return -1;
+                        else if (a.phone > b.phone) return 1;
+                        return 0
+                    });
+                    $.each(data, (index, value) => {
+                        $(".storage").append(`
+                    <div class="contact-row">
+                        <span class="contact-row-id">${index + 1}</span>
+                        <span class="contact-row-firstname">${value.firstName}</span>
+                        <span class="contact-row-lastname">${value.lastName}</span>
+                        <span class="contact-row-phone">${value.phone}</span>
+                        <span class="contact-row-category">${value.category}</span>
+                    </div>
+                `)
+                    })
+                }
+            }
+            else if (filter === "descending") {
+                if ($(".filter-option").val() === "fname") {
+                    data.sort((a, b) => {
+                        if (a.firstName > b.firstName) return -1;
+                        else if (a.firstName < b.firstName) return 1;
+                        return 0
+                    });
+                    $.each(data, (index, value) => {
+                        $(".storage").append(`
+                    <div class="contact-row">
+                        <span class="contact-row-id">${index + 1}</span>
+                        <span class="contact-row-firstname">${value.firstName}</span>
+                        <span class="contact-row-lastname">${value.lastName}</span>
+                        <span class="contact-row-phone">${value.phone}</span>
+                        <span class="contact-row-category">${value.category}</span>
+                    </div>
+                `)
+                    })
+                }
+                else if ($(".filter-option").val() === "lname") {
+                    data.sort((a, b) => {
+                        if (a.lastName > b.lastName) return -1;
+                        else if (a.lastName < b.lastName) return 1;
+                        return 0
+                    });
+                    $.each(data, (index, value) => {
+                        $(".storage").append(`
+                    <div class="contact-row">
+                        <span class="contact-row-id">${index + 1}</span>
+                        <span class="contact-row-firstname">${value.firstName}</span>
+                        <span class="contact-row-lastname">${value.lastName}</span>
+                        <span class="contact-row-phone">${value.phone}</span>
+                        <span class="contact-row-category">${value.category}</span>
+                    </div>
+                `)
+                    })
+                }
+                else if ($(".filter-option").val() === "phone") {
+                    data.sort((a, b) => {
+                        if (a.phone > b.phone) return -1;
+                        else if (a.phone < b.phone) return 1;
+                        return 0
+                    });
+                    $.each(data, (index, value) => {
+                        $(".storage").append(`
+                    <div class="contact-row">
+                        <span class="contact-row-id">${index + 1}</span>
+                        <span class="contact-row-firstname">${value.firstName}</span>
+                        <span class="contact-row-lastname">${value.lastName}</span>
+                        <span class="contact-row-phone">${value.phone}</span>
+                        <span class="contact-row-category">${value.category}</span>
+                    </div>
+                `)
+                    })
+                }
+            }
+
+        })
+    }
+
+    /* Contacts initial loading */
+    $(document).ready(() => {
+        loadContet()
+    })
+
+    /* Utility for capitalizing words */
+    function capitalize(string_object) {
+        let string_object_c = Object.assign([], string_object);
+        string_object_c[0] = string_object_c[0].toUpperCase()
+        for (let index = 1; index < string_object.length; index++) {
+            string_object_c[index] = string_object_c[index].toLowerCase()
+        }
+        return string_object_c.join('');
+    }
+
+    /*Utility for converting numbers to phone format*/
+    function phoneConvertor(phone_string) {
+        if (phone_string.length === 11) {
+            return `+${phone_string[0]} (${phone_string.slice(1, 4)}) ${phone_string.slice(4, 7)}-${phone_string.slice(7, 9)}-${phone_string.slice(9, 12)}`
+        }
+    }
+
+
+    /* Contacts searching */
+    $(".search-field").on("input", (event) => {
+        if (event.target.value !== "") {
+            if ($(".search-option").val() === "name") {
+                if (event.target.value.includes(" ")) {
+                    const [firstname, lastname] = event.target.value.split(" ");
+                    if (lastname !== "") {
+                        $.get(
+                            `http://localhost:5000/api/contacts/by-fullname/${capitalize(firstname)}/${capitalize(lastname)}`,
+                            (data, status) => {
+                                if (status === "success") {
+                                    if (data.result === undefined) {
+                                        $(".storage").empty();
+                                        $.each(data, (index, value) => {
+                                            $(".storage").append(`
+                                            <div class="contact-row">
+                                                <span class="contact-row-id">${index + 1}</span>
+                                                <span class="contact-row-firstname">${value.firstName}</span>
+                                                <span class="contact-row-lastname">${value.lastName}</span>
+                                                <span class="contact-row-phone">${value.phone}</span>
+                                                <span class="contact-row-category">${value.category}</span>
+                                            </div>
+                                        `)
+                                        })
+                                    }
+                                    else {
+                                        $(".storage").empty();
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+                else {
+                    $.get(
+                        `http://localhost:5000/api/contacts/by-name/${capitalize(event.target.value)}`,
+                        (data, status) => {
+                            if (status === "success") {
+                                if (data.result === undefined) {
+                                    $(".storage").empty();
+                                    $.each(data, (index, value) => {
+                                        $(".storage").append(`
+                                    <div class="contact-row">
+                                        <span class="contact-row-id">${index + 1}</span>
+                                        <span class="contact-row-firstname">${value.firstName}</span>
+                                        <span class="contact-row-lastname">${value.lastName}</span>
+                                        <span class="contact-row-phone">${value.phone}</span>
+                                        <span class="contact-row-category">${value.category}</span>
+                                    </div>
+                                `)
+                                    })
+                                }
+                            }
+                        }
+                    )
+                }
+            }
+            else if ($(".search-option").val() === "phone") {
+                const phone_number = phoneConvertor(event.target.value);
+                if (phone_number !== undefined) {
+                    $.get(`http://localhost:5000/api/contact/${phone_number}`,
+                        (data, status) => {
+                            if (status === "success") {
+                                if (data.result === undefined) {
+                                    $(".storage").empty();
+                                    $.each(data, (index, value) => {
+                                        $(".storage").append(`
+                                    <div class="contact-row">
+                                        <span class="contact-row-id">${index + 1}</span>
+                                        <span class="contact-row-firstname">${value.firstName}</span>
+                                        <span class="contact-row-lastname">${value.lastName}</span>
+                                        <span class="contact-row-phone">${value.phone}</span>
+                                        <span class="contact-row-category">${value.category}</span>
+                                    </div>
+                                `)
+                                    })
+                                }
+                            }
+                        }
+                    )
+                }
+            }
+        }
+        else {
+            loadContet();
+        }
+    })
+
+    /*Fitler contacts in ascending order*/
+    $(".filter-ascending").on("click", () => {
+        loadContet("ascending")
+    })
+    $(".filter-descending").on("click", () => {
+        loadContet("descending");
+    })
+
+    document.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+    })
+
+
+    /* Implementing delete and edit of contacts */
+    $(".storage").on("mousedown", ".contact-row", (event) => {
+        if (event.which === 3) {
+            $(".contact-row").append(
+                `<div class="menu">
+                <span class="menu-item delete-item">Delete</span>
+                <span class="menu-item edit-item" data-bs-toggle="modal" data-bs-target="#editModal">Edit</span>
+                <span class="menu-item close-item">Close</span>
+            </div>    
+            `
+            )
+
+            $(".menu").css(
+                {
+                    "top": `${event.clientY}px`,
+                    "left": `${event.clientX}px`
+                }
+            )
+        }
+    })
+
+    $("body").on("click", ".close-item", (event) => {
+        $(".menu").remove();
+    })
+    $("body").on("click", ".delete-item", (event) => {
+        const contactRow = event.target.parentNode.parentNode;
+        const contactRowPhoneData = contactRow.querySelector(".contact-row-phone").textContent;
+        $.get(`http://localhost:5000/api/contact/delete/${contactRowPhoneData}`);
+        $(".menu").remove();
+        loadContet();
+    })
+    $("body").on("click", ".edit-item", (event) => {
+        const contactRow = event.target.parentNode.parentNode;
+        $(".menu").remove();
+
+        const firstname = contactRow.querySelector(".contact-row-firstname").innerHTML;
+        const lastname = contactRow.querySelector(".contact-row-lastname").innerHTML;
+        const phone = contactRow.querySelector(".contact-row-phone").innerHTML;
+        const category = contactRow.querySelector(".contact-row-category").innerHTML.toLowerCase();
+
+        
+        $("#editfirstname").val(firstname);
+        $("#editlastname").val(lastname);
+        $("#editphone").val(phone);
+        $("#editcategory").val(category);
+
+
+        $(".edit-save").on("click", (event) => {
+            if (firstname !== $("#editfirstname").val()) {
+                $.get(`http://localhost:5000/api/contact/update-fname/${phone}/${$("#editfirstname").val()}`);
+            }
+            if (lastname !== $("#editlastname").val()) {
+                $.get(`http://localhost:5000/api/contact/update-lname/${phone}/${$("#editlastname").val()}`);
+            }
+            if (category !== $(".edit-category").val().toLowerCase()) {
+                $.get(`http://localhost:5000/api/contact/update-category/${phone}/${$(".edit-category").val().toLowerCase()}`);
+            }
+            if (phone !== $("#editphone").val()) {
+                $.get(`http://localhost:5000/api/contact/update-phone/${phone}/${$("#editphone").val()}`);
+            }
+            loadContet();
+        })
+    })
+    
+    $('.create-contact').on("click", () => {
+        const firstname = $("#firstname").val();
+        const lastname = $("#lastname").val();
+        const phone = $("#phone").val();
+        const category = $("#category").val();
+
+        $.ajax({
+            url: "http://localhost:5000/api/contact/create",
+            method: 'POST', 
+            data: {
+                firstname,
+                lastname,
+                phone, 
+                category
+            }
+        })
+
+        loadContet();
+
+        $("#firstname").val("");
+        $("#lastname").val("");
+        $("#phone").val("");
+
+       
+    }) 
+
+</script>
+
+</html>
